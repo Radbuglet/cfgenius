@@ -4,6 +4,32 @@
 macro_rules! cond {
     // We begin by implementing `cond!` for one level of `if ... { ... } else { ... }`.
 
+	// true
+	(@__internal_id $($id:tt)*) => { $($id)* };
+	(
+		@__internal_single_munch
+		if true() {
+			$($yes:tt)*
+		} else {
+			$($no:tt)*
+		}
+	) => {
+		$($yes)*
+	};
+
+	// false
+	(@__internal_id $($id:tt)*) => { $($id)* };
+	(
+		@__internal_single_munch
+		if false() {
+			$($yes:tt)*
+		} else {
+			$($no:tt)*
+		}
+	) => {
+		$($no)*
+	};
+
     // cfg
     (@__internal_id $($id:tt)*) => { $($id)* };
     (
@@ -110,13 +136,13 @@ macro_rules! cond {
     // macro
     (
         @__internal_single_munch
-        if macro($path:path $( => $args:tt)?) {
+        if macro($path:path $( => $($args:tt)*)?) {
             $($yes:tt)*
         } else {
             $($no:tt)*
         }
     ) => {
-        $path!($($args ;)? yes { $($yes)* } no { $($no)* } );
+        $path!($(args { $($args)* })? yes { $($yes)* } no { $($no)* } );
     };
 
     // Now, we can implement support for an arbitrary chaining of these.
@@ -171,40 +197,27 @@ macro_rules! cond {
 
 #[macro_export]
 macro_rules! truthy {
-    (yes { $($yes:tt)* } no { $($no:tt)* }) => {
-        $($yes)*
-    };
+    (yes { $($yes:tt)* } no { $($no:tt)* }) => { $($yes)* };
 }
 
 #[macro_export]
 macro_rules! falsy {
-    (yes { $($yes:tt)* } no { $($no:tt)* }) => {
-        $($no)*
-    };
+    (yes { $($yes:tt)* } no { $($no:tt)* }) => { $($no)* };
 }
 
 #[macro_export]
 macro_rules! define {
-    () => {};
-    ($vis:vis $name:ident = true $(; $($rest:tt)*)?) => {
-        $vis use $crate::truthy as $name;
-
-        $($crate::define! { $($rest)* })?
-    };
-    ($vis:vis $name:ident = false $(; $($rest:tt)*)?) => {
-        $vis use $crate::falsy as $name;
-
-        $($crate::define! { $($rest)* })?
-    };
-    ($vis:vis $name:ident = $pred:ident($($pred_args:tt)*) $(; $($rest:tt)*)?) => {
-        $crate::cond! {
-            if $pred($($pred_args)*) {
-                $vis use $crate::truthy as $name;
-            } else {
-                $vis use $crate::falsy as $name;
-            }
-        }
-
-        $($crate::define! { $($rest)* })?
-    };
+    (
+		$( $vis:vis $name:ident = $pred:ident ($($pred_args:tt)*) );* $(;)?
+	) => {
+		$(
+			$crate::cond! {
+				if $pred($($pred_args)*) {
+					$vis use $crate::truthy as $name;
+				} else {
+					$vis use $crate::falsy as $name;
+				}
+			}
+		)*
+	};
 }
