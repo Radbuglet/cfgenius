@@ -116,7 +116,7 @@
 //!
 //! Most variables can be succinctly defined using [`define!`](crate::define). However, because
 //! variables are just macros which are expanded to get their result, you can define your own
-//! variables by following the protocol.
+//! variables by following this protocol.
 //!
 //! The predicate `macro(<path to macro>)` is evaluated by expanding:
 //!
@@ -150,8 +150,7 @@
 
 // #![no_std]
 
-/// A conditionally-compiled statement or item. See crate documentation for more information on the
-/// predicate syntax.
+/// A conditionally-compiled statement or item.
 ///
 /// ## Syntax
 ///
@@ -186,29 +185,29 @@ macro_rules! cond {
 macro_rules! cond {
     // We begin by implementing `cond!` for one level of `if ... { ... } else { ... }`.
 
-	// true
-	(
-		@__internal_single_munch
-		if true() {
-			$($yes:tt)*
-		} else {
-			$($no:tt)*
-		}
-	) => {
-		$($yes)*
-	};
+    // true
+    (
+        @__internal_single_munch
+        if true() {
+            $($yes:tt)*
+        } else {
+            $($no:tt)*
+        }
+    ) => {
+        $($yes)*
+    };
 
-	// false
-	(
-		@__internal_single_munch
-		if false() {
-			$($yes:tt)*
-		} else {
-			$($no:tt)*
-		}
-	) => {
-		$($no)*
-	};
+    // false
+    (
+        @__internal_single_munch
+        if false() {
+            $($yes:tt)*
+        } else {
+            $($no:tt)*
+        }
+    ) => {
+        $($no)*
+    };
 
     // cfg
     (@__internal_id $($id:tt)*) => { $($id)* };
@@ -376,8 +375,7 @@ macro_rules! cond {
     };
 }
 
-/// A conditionally-compiled expression. See crate documentation for more information on the predicate
-/// syntax.
+/// A conditionally-compiled expression.
 ///
 /// ## Syntax
 ///
@@ -478,16 +476,16 @@ macro_rules! falsy {
 #[macro_export]
 macro_rules! define {
     (
-		$( $vis:vis $name:ident = $pred:ident ($($pred_args:tt)*) );* $(;)?
-	) => {
-		$(
-			$crate::cond! {
-				if $pred($($pred_args)*) {
-					$vis use $crate::truthy as $name;
-				} else {
-					$vis use $crate::falsy as $name;
-				}
-			}
-		)*
-	};
+        $( $vis:vis $name:ident = $pred:ident ($($pred_args:tt)*) );* $(;)?
+    ) => {
+        $(
+            $crate::cond! {
+                if $pred($($pred_args)*) {
+                    $vis use $crate::truthy as $name;
+                } else {
+                    $vis use $crate::falsy as $name;
+                }
+            }
+        )*
+    };
 }

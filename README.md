@@ -118,7 +118,7 @@ are supported:
 
 Most variables can be succinctly defined using [`define!`](https://docs.rs/cfgenius/latest/cfgenius/macro.define.html). However, because
 variables are just macros which are expanded to get their result, you can define your own
-variables by following the protocol.
+variables by following this protocol.
 
 The predicate `macro(<path to macro>)` is evaluated by expanding:
 
