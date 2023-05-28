@@ -3,9 +3,9 @@
 //! This macro is similar to [`cfg_if!`][cfg_if]—so similar, in fact, that we're going to plagiarize its
 //! documentation for a bit:
 //!
-//! > The macro provided by this crate, [`cond!`], is similar to the `if/elif` C preprocessor macro
-//! > by allowing definition of a cascade of `#[cfg]` cases, emitting the implementation which
-//! > matches first.
+//! > The macro provided by this crate, [`cond!`](crate::cond), is similar to the `if/elif` C
+//! > preprocessor macro by allowing definition of a cascade of `#[cfg]` cases, emitting the
+//! > implementation which matches first.
 //! >
 //! > This allows you to conveniently provide a long list `#[cfg]`'d blocks of code without having
 //! > to rewrite each clause multiple times.
@@ -26,8 +26,8 @@
 //!
 //! ---
 //!
-//! What's new, however, is the ability to [`define!`] custom conditional-compilation variables and
-//! use those variables in your [`cond!`] predicates:
+//! What's new, however, is the ability to [`define!`](crate::define) custom conditional-compilation
+//! variables and use those variables in your [`cond!`](crate::cond) predicates:
 //!
 //! ```
 //! // In `crate_1`...
@@ -114,9 +114,9 @@
 //!
 //! ## Custom Variables
 //!
-//! Most variables can be succinctly defined using [`define!`]. However, because variables are just
-//! macros which are expanded to get their result, you can define your own variables by following the
-//! protocol.
+//! Most variables can be succinctly defined using [`define!`](crate::define). However, because
+//! variables are just macros which are expanded to get their result, you can define your own
+//! variables by following the protocol.
 //!
 //! The predicate `macro(<path to macro>)` is evaluated by expanding:
 //!
@@ -449,7 +449,7 @@ macro_rules! falsy {
 /// Defines a zero or more conditional-compilation variables which evaluate to the provided `cfgenius`
 /// predicate.
 ///
-/// These merely desugar to `use` items of [`truthy!`] and [`falsy!`].
+/// These merely desugar to `use` items of [`truthy!`](crate::truthy) and [`falsy!`](crate::falsy).
 ///
 /// ## Syntax
 ///

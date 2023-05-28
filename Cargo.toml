@@ -1,6 +1,12 @@
 [package]
 name = "cfgenius"
 version = "0.1.0"
+description = "Conditional compilation with macro support in Rust"
+readme = "README.md"
+categories = ["rust-patterns", "no-std"]
+keywords = ["cfg", "variable", "macro"]
+license = "MIT"
+repository = "https://github.com/Radbuglet/cfgenius"
 edition = "2021"
 
 [dependencies]
