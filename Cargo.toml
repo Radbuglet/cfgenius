@@ -1,6 +1,6 @@
 [package]
 name = "cfgenius"
-version = "0.1.0"
+version = "0.1.1"
 description = "Conditional compilation with macro support in Rust"
 readme = "README.md"
 categories = ["rust-patterns", "no-std"]

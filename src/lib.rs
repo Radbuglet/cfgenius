@@ -321,7 +321,7 @@ macro_rules! cond {
             $($no:tt)*
         }
     ) => {
-        $path!($(args { $($args)* })? yes { $($yes)* } no { $($no)* } );
+        $path! { $(args { $($args)* })? yes { $($yes)* } no { $($no)* } }
     };
 
     // Now, we can implement support for an arbitrary chaining of these.
